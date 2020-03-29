@@ -25,10 +25,16 @@ function viewTodo() {
 	todos.forEach(todo => {
 		let li = document.createElement("li");
 		let p = document.createElement("p");
-
 		let spanX = document.createElement("span");
 		let checkInput = document.createElement("input");
 		checkInput.type = "checkbox";
+		const label = document.createElement("label");
+		tickImgBox = document.createElement("div");
+		tickImgBox.className = "tick_img_box";
+
+		// Apppending the label and input to li
+		label.appendChild(tickImgBox);
+		li.appendChild(label);
 		p.classList.add("para");
 		li.classList.add("li_styles");
 		spanX.className = "remove_items";
