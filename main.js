@@ -17,6 +17,19 @@ function reducer(state = initialState, action) {
 			const newTodos = [...state.todos, newTodo];
 			return { ...state, todos: newTodos };
 		}
+		case "Delete_Todo": {
+			console.log(state.todos);
+			const newTodos = state.todos.filter(
+				todo => !(todo.id == action.id)
+			);
+			return { ...state, todos: newTodos };
+		}
+		case "Toggle_Todo": {
+			const newTodos = state.todos.map(todo =>
+				todo.id === action.id ? { ...todo, done: !todo.done } : todo
+			);
+			return { ...state, todos: newTodos };
+		}
 	}
 }
 function viewTodo() {
@@ -40,6 +53,12 @@ function viewTodo() {
 		spanX.className = "remove_items";
 		checkInput.checked = todo.isDone;
 		spanX.innerHTML = "×";
+		spanX.addEventListener("click", () => {
+			store.dispatch({
+				type: "Delete_Todo",
+				id: todo.id
+			});
+		});
 		p.innerHTML = todo.text;
 		li.append(checkInput, p, spanX);
 		ul.append(li);
@@ -48,6 +67,12 @@ function viewTodo() {
 
 let store = Redux.createStore(reducer);
 store.subscribe(viewTodo);
+
+function ToggleTodo(event) {
+	store.dispatch({
+		type: "Toggle_Todo"
+	});
+}
 
 input.addEventListener("keyup", event => {
 	if (event.keyCode === 13 && event.target.value.trim() !== "") {
