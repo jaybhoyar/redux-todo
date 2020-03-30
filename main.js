@@ -18,7 +18,6 @@ function reducer(state = initialState, action) {
 			return { ...state, todos: newTodos };
 		}
 		case "Delete_Todo": {
-			console.log(state.todos);
 			const newTodos = state.todos.filter(
 				todo => !(todo.id == action.id)
 			);
@@ -41,17 +40,19 @@ function viewTodo() {
 		let spanX = document.createElement("span");
 		let checkInput = document.createElement("input");
 		checkInput.type = "checkbox";
+		checkInput.checked = todo.isDone;
 		const label = document.createElement("label");
 		tickImgBox = document.createElement("div");
 		tickImgBox.className = "tick_img_box";
-
-		// Apppending the label and input to li
+		img = document.createElement("img");
+		img.className = "tick";
+		img.src = "tick.png";
+		tickImgBox.appendChild(img);
 		label.appendChild(tickImgBox);
 		li.appendChild(label);
 		p.classList.add("para");
 		li.classList.add("li_styles");
 		spanX.className = "remove_items";
-		checkInput.checked = todo.isDone;
 		spanX.innerHTML = "×";
 		spanX.addEventListener("click", () => {
 			store.dispatch({
@@ -59,7 +60,19 @@ function viewTodo() {
 				id: todo.id
 			});
 		});
+		checkInput.addEventListener("click", () => {
+			console.log("in checkbox");
+			store.dispatch({
+				type: "Toggle_Todo",
+				id: todo.id
+			});
+		});
 		p.innerHTML = todo.text;
+		if (todo.isDone) {
+			img.src = "tick.png";
+		} else {
+			img.src = "";
+		}
 		li.append(checkInput, p, spanX);
 		ul.append(li);
 	});
@@ -68,9 +81,10 @@ function viewTodo() {
 let store = Redux.createStore(reducer);
 store.subscribe(viewTodo);
 
-function ToggleTodo(event) {
+function ToggleTodo(id) {
 	store.dispatch({
-		type: "Toggle_Todo"
+		type: "Toggle_Todo",
+		id: id
 	});
 }
 
