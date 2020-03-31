@@ -25,7 +25,7 @@ function reducer(state = initialState, action) {
 		}
 		case "Toggle_Todo": {
 			const newTodos = state.todos.map(todo =>
-				todo.id === action.id ? { ...todo, done: !todo.done } : todo
+				todo.id === action.id ? { ...todo, isDone: !todo.isDone } : todo
 			);
 			return { ...state, todos: newTodos };
 		}
@@ -41,15 +41,15 @@ function viewTodo() {
 		let checkInput = document.createElement("input");
 		checkInput.type = "checkbox";
 		checkInput.checked = todo.isDone;
-		const label = document.createElement("label");
-		tickImgBox = document.createElement("div");
-		tickImgBox.className = "tick_img_box";
-		img = document.createElement("img");
-		img.className = "tick";
-		img.src = "tick.png";
-		tickImgBox.appendChild(img);
-		label.appendChild(tickImgBox);
-		li.appendChild(label);
+		// const label = document.createElement("label");
+		// tickImgBox = document.createElement("div");
+		// tickImgBox.className = "tick_img_box";
+		// img = document.createElement("img");
+		// img.className = "tick";
+		// img.src = "tick.png";
+		// tickImgBox.appendChild(img);
+		// label.appendChild(tickImgBox);
+		// li.appendChild(label);
 		p.classList.add("para");
 		li.classList.add("li_styles");
 		spanX.className = "remove_items";
@@ -61,18 +61,19 @@ function viewTodo() {
 			});
 		});
 		checkInput.addEventListener("click", () => {
-			console.log("in checkbox");
+			if (todo.isDone) p.style.textDecoration = "line-through";
 			store.dispatch({
 				type: "Toggle_Todo",
-				id: todo.id
+				id: todo.id,
+				isDone: todo.isDone
 			});
 		});
 		p.innerHTML = todo.text;
-		if (todo.isDone) {
-			img.src = "tick.png";
-		} else {
-			img.src = "";
-		}
+		// if (todo.isDone) {
+		// 	img.src = "tick.png";
+		// } else {
+		// 	img.src = "";
+		// }
 		li.append(checkInput, p, spanX);
 		ul.append(li);
 	});
