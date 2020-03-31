@@ -1,5 +1,6 @@
 let input = document.querySelector(".first_todo");
 let ul = document.querySelector("ul");
+let footer = document.querySelector(".footer");
 
 const initialState = {
 	todos: [],
@@ -74,9 +75,15 @@ function viewTodo() {
 		// } else {
 		// 	img.src = "";
 		// }
+
 		li.append(checkInput, p, spanX);
 		ul.append(li);
 	});
+	if (todos.length >= 1) {
+		footer.style.display = "block";
+	} else {
+		footer.style.display = "none";
+	}
 }
 
 let store = Redux.createStore(reducer);
