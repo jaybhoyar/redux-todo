@@ -1,6 +1,9 @@
 let input = document.querySelector(".first_todo");
 let ul = document.querySelector("ul");
 let footer = document.querySelector(".footer");
+let all_button = document.querySelector("#all_button");
+let active_button = document.querySelector("#active_button");
+let completed_button = document.querySelector("#completed_button");
 
 const initialState = {
 	todos: [],
@@ -30,6 +33,14 @@ function reducer(state = initialState, action) {
 			);
 			return { ...state, todos: newTodos };
 		}
+		case "All_Todo": {
+			const newTodos = state.todos;
+			return { ...state, todos: newTodos };
+		}
+		case "Active_Todo": {
+			const activeTodos = state.todos.filter(todo => todo.isDone);
+			return { ...state, todos: activeTodos };
+		}
 	}
 }
 function viewTodo() {
@@ -42,15 +53,6 @@ function viewTodo() {
 		let checkInput = document.createElement("input");
 		checkInput.type = "checkbox";
 		checkInput.checked = todo.isDone;
-		// const label = document.createElement("label");
-		// tickImgBox = document.createElement("div");
-		// tickImgBox.className = "tick_img_box";
-		// img = document.createElement("img");
-		// img.className = "tick";
-		// img.src = "tick.png";
-		// tickImgBox.appendChild(img);
-		// label.appendChild(tickImgBox);
-		// li.appendChild(label);
 		p.classList.add("para");
 		li.classList.add("li_styles");
 		spanX.className = "remove_items";
@@ -70,12 +72,6 @@ function viewTodo() {
 			});
 		});
 		p.innerHTML = todo.text;
-		// if (todo.isDone) {
-		// 	img.src = "tick.png";
-		// } else {
-		// 	img.src = "";
-		// }
-
 		li.append(checkInput, p, spanX);
 		ul.append(li);
 	});
@@ -89,13 +85,6 @@ function viewTodo() {
 let store = Redux.createStore(reducer);
 store.subscribe(viewTodo);
 
-function ToggleTodo(id) {
-	store.dispatch({
-		type: "Toggle_Todo",
-		id: id
-	});
-}
-
 input.addEventListener("keyup", event => {
 	if (event.keyCode === 13 && event.target.value.trim() !== "") {
 		const text = event.target.value;
@@ -105,4 +94,17 @@ input.addEventListener("keyup", event => {
 		});
 		event.target.value = "";
 	}
+});
+
+all_button.addEventListener("click", () => {
+	// all_button.style.border = "0.5px solid rgba(175, 47, 47, 0.2)";
+	store.dispatch({
+		type: "All_Todo"
+	});
+});
+active_button.addEventListener("click", () => {
+	// active_button.style.border = "0.5px solid rgba(175, 47, 47, 0.2)";
+	store.dispatch({
+		type: "Active_Todo"
+	});
 });

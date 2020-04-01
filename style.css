@@ -161,7 +161,7 @@ button {
 	border-radius: 5px;
 	cursor: pointer;
 }
-.button_border {
+.button_border:focus {
 	border: 0.5px solid rgba(175, 47, 47, 0.2);
 }
 
