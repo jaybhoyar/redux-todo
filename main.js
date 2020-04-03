@@ -13,11 +13,10 @@ function reducer(state = [], action) {
 				text: action.text,
 				isDone: false
 			};
-			state.push(newTodo);
-			return state;
+			return [...state, newTodo];
 		}
 		case "Delete_Todo": {
-			return state.filter(todo => !(todo.id == action.id));
+			return [...state.filter(todo => !(todo.id == action.id))];
 		}
 		case "Toggle_Todo": {
 			return state.map(todo =>
@@ -28,25 +27,16 @@ function reducer(state = [], action) {
 			return state;
 		}
 		case "Active_Todo": {
-			const acTodos = state;
-			console.log("State => ", state);
-			var todos = acTodos.filter(t => !t.isDone);
-			console.log("Todos => ", todos);
-			return todos;
+			return state.filter(t => !t.isDone);
 		}
 		case "Completed_Todo": {
-			const cTodos = state;
-			console.log("State => ", state);
-			var todos = cTodos.filter(t => t.isDone);
-			console.log("Todos => ", todos);
-			return todos;
+			return state.filter(t => t.isDone);
 		}
 	}
 }
 
 function viewTodo() {
 	ul.innerHTML = "";
-
 	const todos = store.getState();
 	todos.forEach(todo => {
 		let li = document.createElement("li");
@@ -111,8 +101,7 @@ completed_button.addEventListener("click", () => {
 	active_button.style.border = "";
 	completed_button.style.border = "0.5px solid rgba(175, 47, 47, 0.2)";
 	store.dispatch({
-		type: "Completed_Todo",
-		state: store.getState()
+		type: "Completed_Todo"
 	});
 });
 active_button.addEventListener("click", () => {
@@ -120,7 +109,6 @@ active_button.addEventListener("click", () => {
 	completed_button.style.border = "";
 	active_button.style.border = "0.5px solid rgba(175, 47, 47, 0.2)";
 	store.dispatch({
-		type: "Active_Todo",
-		state: store.getState()
+		type: "Active_Todo"
 	});
 });
