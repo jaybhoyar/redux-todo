@@ -5,12 +5,7 @@ let all_button = document.querySelector("#all_button");
 let active_button = document.querySelector("#active_button");
 let completed_button = document.querySelector("#completed_button");
 
-const initialState = {
-	todos: [],
-	showCompleted: true
-};
-
-function reducer(state = initialState, action) {
+function reducer(state = [], action) {
 	switch (action.type) {
 		case "ADD_Todo": {
 			const newTodo = {
@@ -18,34 +13,41 @@ function reducer(state = initialState, action) {
 				text: action.text,
 				isDone: false
 			};
-			const newTodos = [...state.todos, newTodo];
-			return { ...state, todos: newTodos };
+			state.push(newTodo);
+			return state;
 		}
 		case "Delete_Todo": {
-			const newTodos = state.todos.filter(
-				todo => !(todo.id == action.id)
-			);
-			return { ...state, todos: newTodos };
+			return state.filter(todo => !(todo.id == action.id));
 		}
 		case "Toggle_Todo": {
-			const newTodos = state.todos.map(todo =>
+			return state.map(todo =>
 				todo.id === action.id ? { ...todo, isDone: !todo.isDone } : todo
 			);
-			return { ...state, todos: newTodos };
 		}
 		case "All_Todo": {
-			const newTodos = state.todos;
-			return { ...state, todos: newTodos };
+			return state;
 		}
 		case "Active_Todo": {
-			const activeTodos = state.todos.filter(todo => todo.isDone);
-			return { ...state, todos: activeTodos };
+			const acTodos = state;
+			console.log("State => ", state);
+			var todos = acTodos.filter(t => !t.isDone);
+			console.log("Todos => ", todos);
+			return todos;
+		}
+		case "Completed_Todo": {
+			const cTodos = state;
+			console.log("State => ", state);
+			var todos = cTodos.filter(t => t.isDone);
+			console.log("Todos => ", todos);
+			return todos;
 		}
 	}
 }
+
 function viewTodo() {
 	ul.innerHTML = "";
-	const { todos } = store.getState();
+
+	const todos = store.getState();
 	todos.forEach(todo => {
 		let li = document.createElement("li");
 		let p = document.createElement("p");
@@ -97,14 +99,28 @@ input.addEventListener("keyup", event => {
 });
 
 all_button.addEventListener("click", () => {
-	// all_button.style.border = "0.5px solid rgba(175, 47, 47, 0.2)";
+	active_button.style.border = "";
+	completed_button.style.border = "";
+	all_button.style.border = "0.5px solid rgba(175, 47, 47, 0.2)";
 	store.dispatch({
 		type: "All_Todo"
 	});
 });
-active_button.addEventListener("click", () => {
-	// active_button.style.border = "0.5px solid rgba(175, 47, 47, 0.2)";
+completed_button.addEventListener("click", () => {
+	all_button.style.border = "";
+	active_button.style.border = "";
+	completed_button.style.border = "0.5px solid rgba(175, 47, 47, 0.2)";
 	store.dispatch({
-		type: "Active_Todo"
+		type: "Completed_Todo",
+		state: store.getState()
+	});
+});
+active_button.addEventListener("click", () => {
+	all_button.style.border = "";
+	completed_button.style.border = "";
+	active_button.style.border = "0.5px solid rgba(175, 47, 47, 0.2)";
+	store.dispatch({
+		type: "Active_Todo",
+		state: store.getState()
 	});
 });
