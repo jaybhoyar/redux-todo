@@ -5,6 +5,7 @@ let all_button = document.querySelector("#all_button");
 let active_button = document.querySelector("#active_button");
 let completed_button = document.querySelector("#completed_button");
 
+
 function reducer(state = [], action) {
 	switch (action.type) {
 		case "ADD_Todo": {
@@ -19,9 +20,12 @@ function reducer(state = [], action) {
 			return [...state.filter(todo => !(todo.id == action.id))];
 		}
 		case "Toggle_Todo": {
-			return state.map(todo =>
-				todo.id === action.id ? { ...todo, isDone: !todo.isDone } : todo
-			);
+			return state.map(todo => {
+				if (todo.id === action.id) {
+					todo.isDone = !todo.isDone;
+				}
+				return todo;
+			});
 		}
 		case "All_Todo": {
 			return state;

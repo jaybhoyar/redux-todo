@@ -321,5 +321,6 @@ input[type="checkbox"] {
 }
 .item_completed_1:hover {
 	cursor: pointer;
-	text-decoration: underline;
+  text-decoration: underline;
 }
+
